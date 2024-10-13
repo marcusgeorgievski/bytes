@@ -1,0 +1,23 @@
+name: local-db
+
+services:
+  db:
+    container_name: local-db
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: test-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data
+
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "test-db"] # password is not required
+      interval: 1m
+      timeout: 30s
+      retries: 3
+      start_period: 30s
