@@ -96,63 +96,6 @@ postgresql://[user[:password]@][host][:port][/dbname][?param1=value1&...]
 postgresql://myuser:mypassword@localhost:5432/mydatabase
 ```
 
-## Features
-
-### Initialization
-
-When a pg container is started for the first time, it will execute files with extensions `.sql`, `.sql.gz`, or `.sh` found in `/docker-entrypoint-initdb.d/`. These files will be executed in alphabetical order.
-
-This is primarily a docker feature specifically implemented in the PostgreSQL Docker image. Docker knows if it's the first time the container is started by checking if the data directory, `/var/lib/postgres/data`, is empty. It is skipped otherwise.
-
-**1. Create dir and needed files**
-
-```sh
-# Create docker-entrypoint-initdb.d directory
-mkdir docker-entrypoint-initdb.d
-
-# Create scripts to run
-touch 01-create-tables.sql
-touch 02-insert-data.sql
-
-
-```
-
-**2. Update permissions**
-
-Can be easily done with a script
-
-```sh
-!/bin/bash
-
-# General verison: recursively set permissions in dir
-# chmod -R 755 docker-entrypoint-initdb.d
-
-# Permissions for directories
-find docker-entrypoint-initdb.d -type d -exec chmod 755 {} +
-
-# Permissions for shell scripts
-find docker-entrypoint-initdb.d -type f -name "*.sh" -exec chmod 755 {} +
-
-# Permissions for sql files
-find docker-entrypoint-initdb.d -type f -name "*.sql" -exec chmod 644 {} +
-
-echo "Permissions updated for docker-entrypoint-initdb.d files"
-```
-
-**3. Configure Volume Mounts**
-
-- `:ro` for read only in contaienr
-
-```yml
-services:
-  db:
-    # ...
-    volumes:
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
-```
-
-**Principle of Least Privilege:** It may be best to manually set permissions for each file. For example, `.sql` files do not need executable permissions because they are not directly executed on the OS, but read and interpreted in the db engine.
-
 ## Notes
 
 - Add extra security with Docker Compose `networks` field to control which services can communicate with each other in multi-service applications.
@@ -165,7 +108,7 @@ services:
   - Monitor and log, a volume can be mounted for this
   - Performance tuning, network security, resource limits, PgBouncer, etc.
 
-### Future Features
+### Features
 
 See `features.md`
 
