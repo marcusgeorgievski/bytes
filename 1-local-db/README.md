@@ -63,14 +63,28 @@ psql -h localhost -p 5432 -U postgres
 ```
 
 ```sql
-\c                  -- Get db and user
+-- Basic Connection and Information Commands
+\c                  -- Get current db and user
 \conninfo           -- Get current db, user, host, and port
 \l                  -- List databases
 \c database_name    -- Connect to a database
-\dt                 -- List tables in current db
+\q                  -- Quit psql
+
+-- Schema and Table Information
+\dn                 -- List all schemas
+\dt schema_name.*   -- List tables in a specific schema
+\dt                 -- List tables in current schema                      *
 \d table_name       -- Describe a table's structure
+\df schema_name.*   -- List functions in a specific schema
+\df                 -- List functions in current schema
+\dv schema_name.*   -- List views in a specific schema
+\dv                 -- List views in current schema
+
+-- User and Privilege Information
 \du                 -- List all roles/users
-\q                  -- Quit
+\du+ username       -- Show detailed information about a specific user
+\dp schema_name.*   -- Show access privileges for objects in a schema
+\dp table_name      -- Show access privileges for a specific table
 ```
 
 **Postgres DSN**
@@ -153,7 +167,11 @@ services:
 
 ### Future Features
 
-- [ ] Initialization scripts
+See `features.md`
+
+- [x] Initialization scripts
+  - [x] Permissions
+  - [x] Create non-root user
 - [ ] SSL for secure connections
 - [ ] Database migrations - Flyway
 - [ ] Automated backups and point-in-time recovery

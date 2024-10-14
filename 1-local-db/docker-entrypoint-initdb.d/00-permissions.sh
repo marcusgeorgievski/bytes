@@ -1,7 +1,11 @@
-!/bin/bash
+#!/bin/bash
+#
+# This script sets the appropriate permissions for files and directories within the 
+#
+# Note:
+#   Ensure this script has execute permissions before running it.
 
-# General verison: recursively set permissions in dir
-# chmod -R 755 docker-entrypoint-initdb.d
+# General recursive verison: chmod -R 755 docker-entrypoint-initdb.d
 
 # Permissions for directories
 find docker-entrypoint-initdb.d -type d -exec chmod 755 {} +
