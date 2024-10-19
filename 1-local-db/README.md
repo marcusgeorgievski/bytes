@@ -45,6 +45,9 @@ docker-compose logs db
 # Rebuild container if Dockerfile or compose file changes
 docker-compose up -d --build
 
+# Check container services configuration
+docker-compose config
+
 #Access pg shell
 docker-compose exec db psql -U myuser -d test-db
 ```
@@ -98,6 +101,7 @@ postgresql://myuser:mypassword@localhost:5432/mydatabase
 
 ## Notes
 
+- Use a `.env`, not a `.env.example` - does not load env variables correctly
 - Add extra security with Docker Compose `networks` field to control which services can communicate with each other in multi-service applications.
 - Using a `.env` is a good idea, just make sure to never commit it anywhere and keep it secure behind a password protected vault
 - Notes for production:
