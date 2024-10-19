@@ -1,0 +1,19 @@
+services:
+  db:
+    container_name: auth-db
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin", "-d", "auth"]
+      interval: 1m
+      timeout: 30s
+      retries: 3
+      start_period: 30s
